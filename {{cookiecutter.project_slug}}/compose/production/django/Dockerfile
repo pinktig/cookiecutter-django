@@ -20,7 +20,18 @@ RUN apk update \
   # Pillow dependencies
   && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev \
   # CFFI dependencies
-  && apk add libffi-dev py-cffi
+  && apk add libffi-dev py-cffi \
+  # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell
+  && apk add postgresql-client \
+  # https://weasyprint.readthedocs.io/en/stable/install.html#alpine
+  && apk add cairo-dev pango-dev gdk-pixbuf-dev \ 
+  # https://github.com/Belval/pdf2image#linux
+  && apk add poppler-utils
+
+# 타임존 설정
+RUN apk --no-cache add tzdata && \
+  cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime \
+  && echo "Asia/Seoul" > /etc/timezone
 
 RUN addgroup -S django \
     && adduser -S -G django django
