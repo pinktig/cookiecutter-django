@@ -13,7 +13,16 @@ RUN apk update \
   # Translations dependencies
   && apk add gettext \
   # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell
-  && apk add postgresql-client
+  && apk add postgresql-client \
+  # https://github.com/Belval/pdf2image#linux
+  && apk add poppler-utils \
+  # https://weasyprint.readthedocs.io/en/stable/install.html#alpine
+  && apk add cairo-dev pango-dev gdk-pixbuf-dev
+
+# 타임존 설정
+RUN apk --no-cache add tzdata && \
+  cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime \
+  && echo "Asia/Seoul" > /etc/timezone
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements
