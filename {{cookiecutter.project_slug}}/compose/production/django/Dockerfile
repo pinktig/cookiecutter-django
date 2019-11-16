@@ -75,6 +75,9 @@ COPY --from=client-builder /app /app
 COPY . /app
 {%- endif %}
 
+RUN mkdir -p /webdata/mediafiles
+RUN chown -R django /webdata/mediafiles
+
 RUN chown -R django /app
 
 USER django
