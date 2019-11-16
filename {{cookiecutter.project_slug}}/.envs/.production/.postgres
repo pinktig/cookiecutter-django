@@ -9,4 +9,4 @@ POSTGRES_PASSWORD=!!!SET POSTGRES_PASSWORD!!!
 # lc_collate 설정
 # ------------------
 POSTGRES_INITDB_ARGS="--lc-collate=C"
-TZ=Asia/Seoul
+TZ={{ cookiecutter.timezone }}

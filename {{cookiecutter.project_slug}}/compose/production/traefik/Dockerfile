@@ -1,5 +1,7 @@
-FROM traefik:1.7-alpine
+FROM traefik:2.0.5
 RUN mkdir -p /etc/traefik/acme
 RUN touch /etc/traefik/acme/acme.json
 RUN chmod 600 /etc/traefik/acme/acme.json
 COPY ./compose/production/traefik/traefik.toml /etc/traefik
+COPY ./compose/production/traefik/dynamic-conf.toml /etc/traefik
+

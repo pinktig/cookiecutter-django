@@ -19,11 +19,13 @@ RUN apk update \
   # https://weasyprint.readthedocs.io/en/stable/install.html#alpine
   && apk add cairo-dev pango-dev gdk-pixbuf-dev
 
+{% if cookiecutter.timezone != "UTC" %}
 # 타임존 설정
 RUN apk --no-cache add tzdata && \
-  cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime \
-  && echo "Asia/Seoul" > /etc/timezone
+  cp /usr/share/zoneinfo/{{ cookiecutter.timezone }} /etc/localtime \
+  && echo "{{ cookiecutter.timezone }}" > /etc/timezone
 
+{% endif %}
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements
 RUN pip install -r /requirements/local.txt

@@ -20,6 +20,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["{{ cookiecutter.domain_name }}"])
 
+
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES["default"] = env.db("DATABASE_URL")  # noqa F405
@@ -149,6 +150,12 @@ class MediaRootGoogleCloudStorage(GoogleCloudStorage):
 
 DEFAULT_FILE_STORAGE = "config.settings.production.MediaRootGoogleCloudStorage"
 MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
+{%- elif cookiecutter.cloud_provider == 'None' %}
+
+# 운영 환경에서는 각각 도커 컨테이너(장고 및 엔진엑스) 볼륨 내 최상단 /webdata/mediafiles/에 저장
+# https://docs.djangoproject.com/en/dev/ref/settings/#media-root
+MEDIA_ROOT = "/webdata/mediafiles/"
+
 {%- endif %}
 
 # TEMPLATES

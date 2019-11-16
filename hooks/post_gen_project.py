@@ -283,6 +283,10 @@ def remove_aws_dockerfile():
     shutil.rmtree(os.path.join("compose", "production", "aws"))
 
 
+def remove_nginx_dockerfile():
+    shutil.rmtree(os.path.join("compose", "production", "nginx"))
+
+
 def main():
     debug = "{{ cookiecutter.debug }}".lower() == "y"
 
@@ -312,6 +316,12 @@ def main():
     ):
         remove_aws_dockerfile()
 
+    if (
+        "{{ cookiecutter.use_docker }}".lower() == "y"
+        and "{{ cookiecutter.cloud_provider}}".lower() != "None"
+    ):
+        remove_nginx_dockerfile()
+
     if "{{ cookiecutter.use_heroku }}".lower() == "n":
         remove_heroku_files()
 
@@ -329,6 +339,7 @@ def main():
     else:
         append_to_gitignore_file(".env")
         append_to_gitignore_file(".envs/*")
+        append_to_gitignore_file("!.envs/.production_sample/")
         if "{{ cookiecutter.keep_local_envs_in_vcs }}".lower() == "y":
             append_to_gitignore_file("!.envs/.local/")
 
@@ -339,10 +350,17 @@ def main():
             remove_node_dockerfile()
 
     if "{{ cookiecutter.cloud_provider}}".lower() == "none":
-        print(
-            WARNING + "You chose not to use a cloud provider, "
-            "media files won't be served in production." + TERMINATOR
-        )
+        if "{{ cookiecutter.use_docker}}".lower() == "y":
+            print(
+                WARNING + "You chose not to use a cloud provider, "
+                          "media files will be served with nginx container instead." + TERMINATOR
+            )
+        else:
+            print(
+                WARNING + "You chose not to use a cloud provider. "
+                          "You need to set up your own service (such as nginx) to serve your media files, otherwise "
+                "media files won't be served in production." + TERMINATOR
+            )
 
     if "{{ cookiecutter.use_celery }}".lower() == "n":
         remove_celery_files()

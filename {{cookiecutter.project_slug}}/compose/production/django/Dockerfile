@@ -24,15 +24,17 @@ RUN apk update \
   # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell
   && apk add postgresql-client \
   # https://weasyprint.readthedocs.io/en/stable/install.html#alpine
-  && apk add cairo-dev pango-dev gdk-pixbuf-dev \ 
+  && apk add cairo-dev pango-dev gdk-pixbuf-dev \
   # https://github.com/Belval/pdf2image#linux
   && apk add poppler-utils
 
+{% if cookiecutter.timezone != "UTC" %}
 # 타임존 설정
 RUN apk --no-cache add tzdata && \
-  cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime \
-  && echo "Asia/Seoul" > /etc/timezone
+  cp /usr/share/zoneinfo/{{ cookiecutter.timezone }} /etc/localtime \
+  && echo "{{ cookiecutter.timezone }}" > /etc/timezone
 
+{% endif %}
 RUN addgroup -S django \
     && adduser -S -G django django
 

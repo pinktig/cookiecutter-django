@@ -1,0 +1,45 @@
+# CERTIFICATE STORE
+[tls.stores]
+  [tls.stores.default]
+
+# MIDDLEWARE
+[http.middlewares]
+  # Redirect to https
+  [http.middlewares.httpsRedirect.redirectScheme]
+    scheme = "https"
+  # csrftoken Proxy
+  [http.middlewares.csrftokenProxy.headers]
+    hostsProxyHeaders = ['X-CSRFToken']
+
+
+# ROUTERS
+[http.routers]
+  [http.routers.django]
+    entryPoints = ["web", "web-secure"]
+    middlewares = ["httpsRedirect", "csrftokenProxy"]
+    service = "django"
+    rule = "Host(`{{ cookiecutter.domain_name }}`)"
+      [http.routers.django.tls]
+        certResolver = "default"
+{% if cookiecutter.cloud_provider == 'None' %}
+  [http.routers.nginx]
+    entryPoints = ["web", "web-secure"]
+    middlewares = ["httpsRedirect"]
+    service = "nginx"
+    rule = "Host(`{{ cookiecutter.domain_name }}`) && PathPrefix(`/media`)"
+      [http.routers.nginx.tls]
+       certResolver = "default"
+{% endif %}
+
+# SERVICES
+[http.services]
+  [http.services.django]
+    [http.services.django.loadBalancer]
+      [[http.services.django.loadBalancer.servers]]
+        url = "http://django:5000"
+{% if cookiecutter.cloud_provider == 'None' %}
+  [http.services.nginx]
+    [http.services.nginx.loadBalancer]
+      [[http.services.nginx.loadBalancer.servers]]
+        url = "http://nginx"
+{% endif %}
