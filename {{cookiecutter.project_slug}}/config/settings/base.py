@@ -318,5 +318,9 @@ INSTALLED_APPS += ["compressor"]
 STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 
 {%- endif %}
+# WAGTAIL
+WAGTAIL_SITE_NAME = "{{ cookiecutter.project_name }}"
+
 # Your stuff...
 # ------------------------------------------------------------------------------
+

@@ -21,9 +21,9 @@ services:
     depends_on:
       - postgres
       - redis
-    {% if cookiecutter.cloud_provider == 'None' -%}
+      {% if cookiecutter.cloud_provider == 'None' -%}
       - nginx
-    {%- endif %}
+      {%- endif %}
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
@@ -56,15 +56,15 @@ services:
   redis:
     image: redis:5.0
 
-  {% if cookiecutter.cloud_provider == 'None' %}
-    nginx:
-      build:
-        context: .
-        dockerfile: ./compose/production/nginx/Dockerfile
-      image: {{ cookiecutter.project_slug }}_production_nginx
-      restart: always
-      volumes:
-        - production_mediafiles_data:/webdata/mediafiles
+  {%- if cookiecutter.cloud_provider == 'None' %}
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile
+    image: {{ cookiecutter.project_slug }}_production_nginx
+    restart: always
+    volumes:
+      - production_mediafiles_data:/webdata/mediafiles
   {% endif %}
   {%- if cookiecutter.use_celery == 'y' %}
 
