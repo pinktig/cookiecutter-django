@@ -318,7 +318,7 @@ def main():
 
     if (
         "{{ cookiecutter.use_docker }}".lower() == "y"
-        and "{{ cookiecutter.cloud_provider}}".lower() != "None"
+        and "{{ cookiecutter.cloud_provider}}".lower() != "none"
     ):
         remove_nginx_dockerfile()
 
