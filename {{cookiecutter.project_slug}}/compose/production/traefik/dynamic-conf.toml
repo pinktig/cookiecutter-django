@@ -14,20 +14,30 @@
 
 # ROUTERS
 [http.routers]
-  [http.routers.django]
+  [http.routers.django-http]
+    entryPoints = ["web"]
+    middlewares = ["httpsRedirect"]
+    service = "django"
+    rule = "Host(`{{ cookiecutter.domain_name }}`)"
+  [http.routers.django-https]
     entryPoints = ["web", "web-secure"]
     middlewares = ["httpsRedirect", "csrftokenProxy"]
     service = "django"
     rule = "Host(`{{ cookiecutter.domain_name }}`)"
-      [http.routers.django.tls]
+      [http.routers.django-https.tls]
         certResolver = "default"
 {% if cookiecutter.cloud_provider == 'None' %}
-  [http.routers.nginx]
+  [http.routers.nginx-http]
+    entryPoints = ["web"]
+    middlewares = ["httpsRedirect"]
+    service = "nginx"
+    rule = "Host(`{{ cookiecutter.domain_name }}`) && PathPrefix(`/media`)"
+  [http.routers.nginx-https]
     entryPoints = ["web", "web-secure"]
     middlewares = ["httpsRedirect"]
     service = "nginx"
     rule = "Host(`{{ cookiecutter.domain_name }}`) && PathPrefix(`/media`)"
-      [http.routers.nginx.tls]
+      [http.routers.nginx-https.tls]
        certResolver = "default"
 {% endif %}
 
