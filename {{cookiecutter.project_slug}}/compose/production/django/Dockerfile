@@ -43,6 +43,9 @@ COPY ./requirements /requirements
 RUN pip install --no-cache-dir -r /requirements/production.txt \
     && rm -rf /requirements
 
+RUN mkdir /root/.ptpython
+COPY ./compose/production/django/.ptpython/config.py /root/.ptpython
+
 COPY ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
