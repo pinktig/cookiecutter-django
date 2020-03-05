@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.7.6-alpine3.11
 
 ENV PYTHONUNBUFFERED 1
 
@@ -30,6 +30,7 @@ RUN apk --no-cache add tzdata && \
 {% endif %}
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements
+RUN pip install --upgrade pip
 RUN pip install -r /requirements/local.txt
 
 COPY ./compose/production/django/entrypoint /entrypoint

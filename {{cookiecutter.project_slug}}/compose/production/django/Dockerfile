@@ -9,7 +9,7 @@ RUN npm run build
 
 # Python build stage
 {%- endif %}
-FROM python:3.7-alpine
+FROM python:3.7.6-alpine3.11
 
 ENV PYTHONUNBUFFERED 1
 
