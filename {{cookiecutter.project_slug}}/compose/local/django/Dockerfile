@@ -40,9 +40,6 @@ RUN chmod +x /entrypoint
 RUN mkdir /root/.ptpython
 COPY ./compose/production/django/.ptpython/config.py /root/.ptpython
 
-RUN mkdir /root/.ptpython
-COPY ./compose/production/django/.ptpython/config.py /root/.ptpython
-
 RUN jupyter contrib nbextension install --user
 RUN jupyter nbextensions_configurator enable --user
 
