@@ -75,7 +75,8 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "rest_framework",
-{%- if cookiecutter.use_celery == 'y' %}
+    "django_extensions",
+    {%- if cookiecutter.use_celery == 'y' %}
     "django_celery_beat",
 {%- endif %}
     'wagtail.contrib.forms',

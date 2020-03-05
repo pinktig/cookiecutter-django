@@ -64,10 +64,7 @@ if env("USE_DOCKER") == "yes":
     INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
 {%- endif %}
 
-# django-extensions
 # ------------------------------------------------------------------------------
-# https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]  # noqa F405
 {% if cookiecutter.use_celery == 'y' -%}
 
 # Celery
@@ -82,3 +79,20 @@ CELERY_TASK_EAGER_PROPAGATES = True
 {%- endif %}
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+# DJANGO EXTENSIONS SETTINGS
+# ipython / jupyter notebook
+IPYTHON_ARGUMENTS = [
+    '--debug',
+]
+
+NOTEBOOK_ARGUMENTS = [
+    '--ip', '0.0.0.0',
+    '--port', '9000',
+    '--allow-root',
+    '--NotebookApp.notebook_dir={}'.format(os.path.join(ROOT_DIR, 'jupyter_notebooks')),
+]
+# print SQL queries in shell_plus
+# https://django-extensions.readthedocs.io/en/latest/shell_plus.html#sql-queries
+SHELL_PLUS_PRINT_SQL = True
+

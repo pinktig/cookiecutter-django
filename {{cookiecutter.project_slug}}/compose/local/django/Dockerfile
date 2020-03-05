@@ -5,6 +5,8 @@ ENV PYTHONUNBUFFERED 1
 RUN apk update \
   # psycopg2 dependencies
   && apk add --virtual build-deps gcc python3-dev musl-dev \
+  # 쥬피터 노트북 dependencies
+  && apk add build-base libzmq zeromq-dev libxslt-dev libxml2 \
   && apk add postgresql-dev \
   # Pillow dependencies
   && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev \
@@ -36,6 +38,22 @@ RUN chmod +x /entrypoint
 
 RUN mkdir /root/.ptpython
 COPY ./compose/production/django/.ptpython/config.py /root/.ptpython
+
+RUN mkdir /root/.ptpython
+COPY ./compose/production/django/.ptpython/config.py /root/.ptpython
+
+RUN jupyter contrib nbextension install --user
+RUN jupyter nbextensions_configurator enable --user
+
+# https://github.com/lambdalisue/jupyter-vim-binding/wiki/Installation#add-vim_binding-to-ipython-notebook-extensions
+RUN mkdir -p $(jupyter --data-dir)/nbextensions
+RUN git clone https://github.com/lambdalisue/jupyter-vim-binding $(jupyter --data-dir)/nbextensions/vim_binding
+RUN chmod -R go-w $(jupyter --data-dir)/nbextensions/vim_binding
+RUN jupyter nbextension enable vim_binding/vim_binding
+
+# https://github.com/dunovank/jupyter-themes#command-line-usage
+RUN jt -t chesterish -f iosevka -fs 13 -nfs 15 -ofs 13 -vim -cellw 90%
+
 
 COPY ./compose/local/django/start /start
 RUN sed -i 's/\r$//g' /start
