@@ -27,7 +27,7 @@ services:
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
-    command: /start
+    command: ["/bin/bash", "/start"]
 
   postgres:
     build:
@@ -71,19 +71,19 @@ services:
   celeryworker:
     <<: *django
     image: {{ cookiecutter.project_slug }}_production_celeryworker
-    command: /start-celeryworker
+    command: ["/bin/bash", "/start-celeryworker"]
 
   celerybeat:
     <<: *django
     image: {{ cookiecutter.project_slug }}_production_celerybeat
-    command: /start-celerybeat
+    command: ["/bin/bash", "/start-celerybeat"]
 
   flower:
     <<: *django
     image: {{ cookiecutter.project_slug }}_production_flower
     ports:
       - "5555:5555"
-    command: /start-flower
+    command: ["/bin/bash", "/start-flower"]
 
   {%- endif %}
 

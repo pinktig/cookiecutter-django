@@ -69,6 +69,13 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
 ]
+
+LOCAL_APPS = [
+    "{{ cookiecutter.project_slug }}.users.apps.UsersConfig",
+    "{{ cookiecutter.project_slug }}",
+    # Your stuff: custom apps go here
+]
+
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "allauth",
@@ -90,17 +97,17 @@ THIRD_PARTY_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
+    'wagtail.contrib.table_block',
+    'wagtail.contrib.settings',
+    'wagtail.contrib.modeladmin',
 
     'modelcluster',
     'taggit',
 ]
 
-LOCAL_APPS = [
-    "{{ cookiecutter.project_slug }}.users.apps.UsersConfig",
-    # Your stuff: custom apps go here
-]
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 # MIGRATIONS
 # ------------------------------------------------------------------------------
@@ -206,6 +213,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "{{ cookiecutter.project_slug }}.utils.context_processors.settings_context",
+                "wagtail.contrib.settings.context_processors.settings",
             ],
         },
     }
@@ -321,6 +329,27 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 {%- endif %}
 # WAGTAIL
 WAGTAIL_SITE_NAME = "{{ cookiecutter.project_name }}"
+WAGTAILEMBEDS_RESPONSIVE_HTML = True
+
+# DRF Settings
+REST_FRAMEWORK = {
+'DEFAULT_RENDERER_CLASSES': (
+        # https://github.com/vbabiy/djangorestframework-camel-case
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        # If you use MultiPartFormParser or FormParser, we also have a camel case version
+        'djangorestframework_camel_case.parser.CamelCaseFormParser',
+        'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        # Any other parsers
+    ),
+    'JSON_UNDERSCOREIZE': {
+        'no_underscore_before_number': True,
+    },
+}
+
 
 # Your stuff...
 # ------------------------------------------------------------------------------

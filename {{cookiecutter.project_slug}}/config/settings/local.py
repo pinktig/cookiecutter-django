@@ -97,3 +97,4 @@ NOTEBOOK_ARGUMENTS = [
 # https://django-extensions.readthedocs.io/en/latest/shell_plus.html#sql-queries
 SHELL_PLUS_PRINT_SQL = True
 
+BASE_URL = "http://127.0.0.1:8000"

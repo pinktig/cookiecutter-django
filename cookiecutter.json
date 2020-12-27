@@ -17,6 +17,7 @@
   "windows": "n",
   "use_pycharm": "n",
   "use_docker": "n",
+  "use_jupyter_notebook": "n",
   "postgresql_version": [
     "11.3",
     "10.8",
